@@ -8,15 +8,18 @@ public class PlayerAnimatorManager : MonoBehaviour
     private string currentState;
 
     [SerializeField]
-    const string PLAYER_IDLE = "Player_idle";
-    const string PLAYER_RUN = "Player_walk";
-    const string PLAYER_ATTACK = "Player_attack";
-    const string PLAYER_JUMP = "Player_jump";
-    const string PLAYER_AIR_ATTACK = "Player_air_attack";
+    public string PLAYER_IDLE = "Player_idle";
+    public string PLAYER_RUN = "Player_Run";
+    public string PLAYER_WALK = "Player_walk";
+    public string PLAYER_ATTACK = "Player_attack";
+    public string PLAYER_JUMP = "Player_jump";
+
+    public string PLAYER_ATTACK1 = "Player_attack1";
+    public string PLAYER_AIR_ATTACK = "Player_air_attack";
 
     void Start()
     {
-        animator = GetComponent<Animator>();
+
     }
 
     public void ChangeAnimationState(string newState)
@@ -26,6 +29,9 @@ public class PlayerAnimatorManager : MonoBehaviour
             return;
         }
         animator.Play(newState);
+        //animator.StopPlayback();
+
+        //Debug.Log("aninacion active");
     }
 
 
