@@ -12,12 +12,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Rigidbody rb;
     [SerializeField] PlayerAnimatorManager AnimatorPlayer;
     [SerializeField] Transform attackPonit;
+    // [SerializeField] GameObject player;
     [SerializeField] LayerMask enemyLayer;
     [SerializeField] float attackRagne = 0.5f;
     [SerializeField] float speed = 1f;
 
     [SerializeField] float impulso = 0.1f;
 
+    [SerializeField] int attakkDamage = 20;
+    [SerializeField] float attackRate = 2f;
+    float nextAttack = 0;
 
 
 
@@ -26,41 +30,48 @@ public class PlayerController : MonoBehaviour
     {
         sp = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody>();
+        // player = GetComponent<GameObject>();
     }
-    public void move()
+    public void Move()
     {
 
         Vector3 move = Vector3.zero;
-
+        //Vector3 move2 = Vector3.zero;
 
         if (Input.GetKey("w"))
         {
             move += Vector3.up;
             //transform.Translate(Vector3.up * Time.deltaTime * speed);
 
+
         }
         if (Input.GetKey("s"))
         {
             move += Vector3.down;
-            //transform.Translate(Vector3.down * Time.deltaTime * speed);
+
 
         }
         if (Input.GetKey("d"))
         {
+
             move += Vector3.right;
-            sp.flipX = false;
+            transform.localScale = new Vector3(1, 1, 1);
+            //sp.flipX = false;
 
         }
 
         if (Input.GetKey("a"))
         {
+
+            transform.localScale = new Vector3(-1, 1, 1);
             move += Vector3.left;
-            //transform.Translate(Vector3.left * Time.deltaTime * speed);
-            sp.flipX = true;
+
+
+            // sp.flipX = true;
         }
         move = move.normalized;
-        transform.Translate(move * Time.deltaTime * speed);
 
+        transform.Translate(move * Time.deltaTime * speed);
 
 
 
@@ -76,26 +87,29 @@ public class PlayerController : MonoBehaviour
 
             rb.AddForce((move + Vector3.forward) * impulso, ForceMode.Impulse);
             AnimatorPlayer.ChangeAnimationState(AnimatorPlayer.PLAYER_JUMP);
+            if ((CheckGround.isGrounded))
+            {
+                AnimatorPlayer.ChangeAnimationState(AnimatorPlayer.PLAYER_IDLE);
+            }
+
+
             Debug.Log(CheckGround.isGrounded);
 
         }
 
 
+
     }
     public void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+
+        Collider[] hitenemies = Physics.OverlapSphere(attackPonit.position, attackRagne, enemyLayer);
+        //Collider2D[] hitenemies = Physics2D.OverlapCircleAll(attackPonit.position, attackRagne, enemyLayer);
+        foreach (Collider enemy in hitenemies)
         {
-
-            AnimatorPlayer.ChangeAnimationState(AnimatorPlayer.PLAYER_ATTACK1);
-            Collider[] hitenemies = Physics.OverlapSphere(attackPonit.position, attackRagne, enemyLayer);
-            foreach (Collider enemy in hitenemies)
-            {
-                Debug.Log("le pego a", enemy);
-            }
-
+            enemy.GetComponent<Enemy>().DanioRecibido(attakkDamage);
         }
-
+        AnimatorPlayer.ChangeAnimationState(AnimatorPlayer.PLAYER_ATTACK1);
     }
     void OnDrawGizmosSelected()
     {
@@ -106,14 +120,33 @@ public class PlayerController : MonoBehaviour
     }
 
 
+
+
+
+
+
+
     void Update()
     {
+        if (Time.time >= nextAttack)
+        {
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                Attack();
+                nextAttack = Time.time + 1f / attackRate;
+            }
+        }
+
         if (!(Input.GetKey("a") || Input.GetKey("d") || Input.GetKey("w") || Input.GetKey("s") || Input.GetKey("k")) && !(Input.GetKey("space")))
         {
             AnimatorPlayer.ChangeAnimationState(AnimatorPlayer.PLAYER_IDLE);
         }
-        Attack();
-        move();
+
+        Move();
+
+
+
+
 
 
     }

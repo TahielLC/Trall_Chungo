@@ -11,18 +11,12 @@ public class CheckGround : MonoBehaviour
     {
         isGrounded = true;
     }
-    // private void OnTriggerEnter(Collider collision)
-    // {
-    //     isGrounded = true;
-    // }
+
     private void OnTriggerExit(Collider collision)
     {
         isGrounded = false;
     }
-    // private void OnTriggerExit(Collider collision)
-    // {
-    //     isGrounded = false;
-    // }
+    
     void Start()
     {
         Debug.Log(isGrounded);
@@ -31,6 +25,6 @@ public class CheckGround : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(isGrounded);
+        
     }
 }
