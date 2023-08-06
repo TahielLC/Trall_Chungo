@@ -6,10 +6,16 @@ public class Enemy : MonoBehaviour
 {
     public int maxHealt = 100;
     int currentHealt;
+    public Vector3 pos;
+
 
     private void Start()
     {
+        pos = transform.position;
+        pos += new Vector3(2, 2, 0);
         currentHealt = maxHealt;
+        // Debug.Log(pos);
+
     }
 
 
@@ -30,12 +36,6 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-
-
-
-
-
-
 
     }
 }
