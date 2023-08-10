@@ -1,20 +1,19 @@
 using UnityEngine;
-using UnityEngine.Pool;
 
-namespace Code
+namespace Utilities
 {
     public abstract class RecyclableObject : MonoBehaviour
     {
-        private IObjectPool<RecyclableObject> _objectPool;
+        private ObjectPool _objectPool;
 
-        internal void Configure(IObjectPool<RecyclableObject> objectPool)
+        internal void Configure(ObjectPool objectPool)
         {
             _objectPool = objectPool;
         }
 
         public void Recycle()
         {
-            _objectPool.Release(this);
+            _objectPool.RecycleGameObject(this);
         }
         internal abstract void Init();
         internal abstract void Release();

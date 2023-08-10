@@ -1,14 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utilities;
 
-public class Enemy : MonoBehaviour
+public class Enemy : RecyclableObject
 {
     public int maxHealt = 100;
     int currentHealt;
     public Vector3 pos;
 
+    internal override void Init()
+    {
+        Invoke(nameof(Recycle), 5);
+    }
 
+    internal override void Release()
+    {
+        Debug.Log("Reciclado");
+    }
     private void Start()
     {
         pos = transform.position;
